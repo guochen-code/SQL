@@ -15,6 +15,8 @@ FROM Sales.Customers AS C
 
 
 ######
+- Write a query that returns all customers in the output, but matches them with their respective orders only if they were placed on February 12, 2016:
+- Tables involved: Sales.Customers and Sales.Orders
 
 SELECT C.custid, C.companyname, O.orderid, O.orderdate
 FROM Sales.Customers AS C
@@ -30,3 +32,22 @@ FROM Sales.Customers AS C
 - You still want to get customers who didn’t place orders on that date in the output. 
 - Hence, the ON clause should match customers and orders based on both an equality between the customer’s customer ID and the order’s customer ID, 
 - and on the order date being February 12, 2016. 
+
+
+- Explain why the following query isn’t a correct solution
+
+SELECT C.custid, C.companyname, O.orderid, O.orderdate
+FROM Sales.Customers AS C
+  LEFT OUTER JOIN Sales.Orders AS O
+    ON O.custid = C.custid
+WHERE O.orderdate = '20160212'
+   OR O.orderid IS NULL;
+   
+- The outer join matches all customers with their respective orders, and it preserves also customers who didn’t place any orders. 
+- Customers without orders have NULLs in the order attributes. 
+- Then the WHERE filter keeps only rows where the order date is February 12, 2016 or the order ID is NULL (a customer without orders at all). 
+- The filter discards customers who didn’t place orders on February 12, 2016 but did place orders on other dates, 
+- and according to Exercise 7 the query is supposed to return all customers. 
+
+ - Observe that many of the 91 customers from the Customers table are missing. As mentioned, those are customers who didn’t place orders on February 12, 2016, 
+ - but did place orders on other dates.
