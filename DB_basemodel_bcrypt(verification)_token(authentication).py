@@ -197,7 +197,7 @@ async def update_todo(todo_id: int,
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 3 required inputs
 @app.delete("/{todo_id}")
 async def delete_todo(todo_id: int,
-                      user: dict = Depends(get_current_user),   # you can delete ones only related to the identified user by token. If use todo_id that belongs to other users, will pop out error. 
+                      user: dict = Depends(get_current_user),   # you can delete ones only related to the identified user by token (based on JWT). If use todo_id that belongs to other users, will pop out error. 
                       db: Session = Depends(get_db)):
     if user is None:
         raise get_user_exception()
