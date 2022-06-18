@@ -1,3 +1,6 @@
+1. create a database
+2. connect to the database
+
 ****************************************************************** Part I - database.py ******************************************************************
 # preset connect to sqlite database 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./<databasename>.db" # preset up to create a .db file
