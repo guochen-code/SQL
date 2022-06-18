@@ -133,7 +133,7 @@ def token_exception():
 
 from auth import get_current_user, get_user_exception
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 3 required inputs
 @app.get("/todo/{todo_id}")
 async def read_todo(todo_id: int,
                     user: dict = Depends(get_current_user),
@@ -148,7 +148,7 @@ async def read_todo(todo_id: int,
         return todo_model
     raise http_exception()
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 3 required inputs
 @app.post("/")
 async def create_todo(todo: Todo,
                       user: dict = Depends(get_current_user),
@@ -167,7 +167,7 @@ async def create_todo(todo: Todo,
 
     return successful_response(201)
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 4 required inputs
 @app.put("/{todo_id}")
 async def update_todo(todo_id: int,
                       todo: Todo,                              ### where is the update from (input in body-raw in postman)
@@ -194,7 +194,7 @@ async def update_todo(todo_id: int,
 
     return successful_response(200)
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 3 required inputs
 @app.delete("/{todo_id}")
 async def delete_todo(todo_id: int,
                       user: dict = Depends(get_current_user),
