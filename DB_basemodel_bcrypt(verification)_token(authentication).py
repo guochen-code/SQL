@@ -88,3 +88,22 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
                                 user.id,
                                 expires_delta=token_expires)
     return {"token": token}
+
+*********************************** Part III *************************************
+from jose import JWTError
+
+
+async def get_current_user(token: str = Depends(oauth2_bearer)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        user_id: int = payload.get("id")
+        if username is None or user_id is None:
+            raise get_user_exception() ## == raise HTTPException(status_code=404, detail = 'user not found')
+        return {"username": username, "id": user_id}
+    except JWTError:
+        raise get_user_exception() ## == raise HTTPException(status_code=404, detail = 'user not found')
+        
+        
+        
+        
