@@ -1,3 +1,4 @@
+%%%%%%%%%%%%%%%%%%% auth.py %%%%%%%%%%%%%%%%%%%%%%%
 from fastapi import FastAPI
 from pydantic import Bas_eModel
 from passlib.context import CryptContext
@@ -104,6 +105,40 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
     except JWTError:
         raise get_user_exception() ## == raise HTTPException(status_code=404, detail = 'user not found')
         
+# exception
+
+from fastapi import status       
         
-        
-        
+
+def get_user_exception():
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    return credentials_exception
+
+
+def token_exception():
+    token_exception_response = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Incorrect username or password",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    return token_exception_response
+
+%%%%%%%%%%%%%%%%%%%%% go back to main.py which interact with database %%%%%%%%%%%%%%%%%%%%%%
+
+@app.get("/todo/{todo_id}")
+async def read_todo(todo_id: int,
+                    user: dict = Depends(get_current_user),
+                    db: Session = Depends(get_db)):
+    if user is None:
+        raise get_user_exception()
+    todo_model = db.query(models.Todos)\
+        .filter(models.Todos.id == todo_id)\
+        .filter(models.Todos.owner_id == user.get("id"))\
+        .first()
+    if todo_model is not None:
+        return todo_model
+    raise http_exception()
