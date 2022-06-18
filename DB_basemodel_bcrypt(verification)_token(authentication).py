@@ -127,7 +127,10 @@ def token_exception():
     )
     return token_exception_response
 
-%%%%%%%%%%%%%%%%%%%%% go back to main.py which interact with database %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% go back to main.py which interact with database (paste token in the header in postmant) %%%%%%%%%%%%%%%%%%%%%%
+
+from auth import get_current_user, get_user_exception
+
 
 @app.get("/todo/{todo_id}")
 async def read_todo(todo_id: int,
