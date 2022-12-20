@@ -1,0 +1,39 @@
+create table grades_org (id serial not null, g int not null); # serial: automatically increment by 1
+insert into grades_org(g) select floor(random()*100) from generate_series (0,10000000);
+create index grades_org_index grades_org(g);
+
+explain analyze select count(*) from grades_org where g = 30;
+explain analyze select count(*) from grades_org where g between 30 and 35;
+
+
+# partition
+create table grades_parts (id serial not null, g int not null) partition by range(g);
+
+create table g0035 (like grades_parts including indexes);
+create table g3560 (like grades_parts including indexes);
+create table g6080 (like grades_parts including indexes);
+create table g80100 (like grades_parts including indexes);
+# attache partitions one by one to my major table
+alter table grades_parts attach parition g0035 for values from (0) to (35);
+alter table grades_parts attach parition g3560 for values from (35) to (60);
+alter table grades_parts attach parition g6080 for values from (60) to (80);
+alter table grades_parts attach parition g80100 for values from (80) to (100);
+
+# up to now the table is still empty
+insert into grades_parts select * from grades_org # copy table to table
+# during insertion, it will look up the partition setup
+
+# create index
+create index grades_parts_idx on grades_parts(g); # automatically create index on all the partitions
+
+# show the size of index
+select pg_relation_size(oid), relname from pg_class order by pg_relation_size(oid) desc;
+
+
+# we want this feature turned on!!!!!! otherwise parition is not working.
+show ENABLE_PARTITION_PRUNING;
+-> on 
+# what if off
+set enable_parition_pruning = off;
+# then the whole parition is useless, you will hit all the paritions instead of going to one specific partition that contain your value
+
