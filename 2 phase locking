@@ -1,0 +1,13 @@
+# to avoid double booking in the movie ticket
+
+# user-1 and user-2 are booking the same seat simultaneously:
+user-1:
+begin transaction;
+select * from seats where id = 14 for update; # key is for update, this locks the seat
+update seats set isbooked=1, name = 'Hussein' where id = 14;
+commit;
+
+user-2:
+begin transaction;
+select * from seats where id = 14 for update; this command will be blocked because of 2 phase booking;
+# once user-1 is done, this command will show the ticket is booked with name of Hussein
