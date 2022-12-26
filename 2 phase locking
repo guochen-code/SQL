@@ -11,3 +11,9 @@ user-2:
 begin transaction;
 select * from seats where id = 14 for update; this command will be blocked because of 2 phase booking;
 # once user-1 is done, this command will show the ticket is booked with name of Hussein
+
+********************************************
+
+exclusive locks conflicts with other exclusive lock or shared locks. 
+So it appears that the other transaction is allowed to read because it is not obtaining any shared lock. 
+If you want the other transaction to be blocked from reading try running it with FOR SHARE option
